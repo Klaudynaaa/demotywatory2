@@ -5,6 +5,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css" media="all">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </head>
 <body>
 <?php
@@ -77,12 +78,34 @@ $conn->close();
             <h3><?php echo $r['title']?></h3>
 
             <img src="<?php echo $r['imgsrc']?>">
+
+            <button id="<?php echo $r['id'] ?>" onClick="reply_click(this)">Usun</button>
         </div>
         <?php endforeach; ?>
     </div>
 </div>
 
 <script>
+    function reply_click(obj) {
+        var id = obj.id;
+        console.log(id);
+
+        if (confirm("Czy na pewno usunac?")) {
+            $.ajax({
+                method: "POST",
+                url: "delete.php",
+                data: {id: id},
+                success: function (data) {
+                    alert('usunieto')
+                },
+                error: function (data) {
+                    alert('nie usunieto');
+
+                }
+            });
+        }
+    }
+
     // Get the modal
     var modal = document.getElementById("myModal");
 
