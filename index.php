@@ -9,9 +9,6 @@
 </head>
 <body>
 <?php
-
-$x = $_POST['title'];
-$y = $_POST['image'];
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -25,16 +22,47 @@ if ($conn->connect_error) {
 
 echo "connected successfully";
 
-$sql = "INSERT INTO `demotywatory`(`title`, `imgsrc`) VALUES ('$x', '$y')";
+
+if(isset($_POST['but_upload'])){
+//    $name = $_FILES['file']['name'];
+    $name = $_POST['title'];
+    $target_dir = "upload/";
+    $target_file = $target_dir . basename($_FILES["file"]["name"]);
+
+    // Select file type
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+    // Valid file extensions
+    $extensions_arr = array("jpg","jpeg","png","gif");
+
+    // Check extension
+    if( in_array($imageFileType,$extensions_arr) ){
+
+        // Convert to base64
+        $image_base64 = base64_encode(file_get_contents($_FILES['file']['tmp_name']) );
+        $image = 'data:image/'.$imageFileType.';base64,'.$image_base64;
+
+        // Insert record
+        $query = "insert into demotywatory(title,imgsrc) values('".$name."','".$image."')";
+
+        mysqli_query($conn,$query) or die(mysqli_error($conn));
+
+    }
+
+}
+
+//$images_sql = 'SELECT * from demotywatory order by id desc';
+//$result = mysqli_query($conn, $images_sql);
+
+
+$sql = "select * from demotywatory order by id desc ";
+$result = $conn->query($sql);
 
 if ($conn->query($sql) === TRUE) {
     echo "new record created successfully";
 } else {
     echo "Error " .$sql . "<br>" . $conn->error;
 }
-
-$sql = "SELECT * FROM demotywatory ORDER BY id desc ";
-$result = $conn->query($sql);
 
 $conn->close();
 ?>
@@ -55,14 +83,14 @@ $conn->close();
     <!-- Modal content -->
     <div class="modal-content">
         <span class="close">&times;</span>
-        <form action="index.php" method="post">
+        <form method="post" action="index.php" enctype='multipart/form-data'>
             Tytuł: <br>
             <input type="text" name="title">
             <br>
             Obrazek: <br>
-            <input type="text" name="image">
+            <input type="file" name="file">
             <br><br>
-            <button type="submit">Zapisz</button>
+            <input type='submit' value='Zapisz' name='but_upload'>
         </form>
     </div>
 </div>
@@ -71,13 +99,12 @@ $conn->close();
 <div class="container">
 
     <h1>Demotywatory<span> 2</span></h1>
-    
+
     <div class="content">
         <?php foreach ($result as $r): ?>
         <div class="post">
             <h3><?php echo $r['title']?></h3>
-
-            <img src="<?php echo $r['imgsrc']?>">
+            <img src='<?php echo $r['imgsrc'] ?>' >
 
             <button id="<?php echo $r['id'] ?>" onClick="reply_click(this)">Usun</button>
         </div>
