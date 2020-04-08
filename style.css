@@ -57,6 +57,11 @@ button {
     font-size: 25px;
 }
 
+.btnpost {
+    display: block;
+    margin: 0 auto;
+}
+
 .modal {
     text-align: center;
     display: none;
