@@ -39,21 +39,17 @@ if(isset($_POST['but_upload'])){
     if( in_array($imageFileType,$extensions_arr) ){
 
         // Convert to base64
-        $image_base64 = base64_encode(file_get_contents($_FILES['file']['tmp_name']) );
-        $image = 'data:image/'.$imageFileType.';base64,'.$image_base64;
+//        $image_base64 = base64_encode(file_get_contents($_FILES['file']['tmp_name']) );
+//        $image = 'data:image/'.$imageFileType.';base64,'.$image_base64;
 
         // Insert record
-        $query = "insert into demotywatory(title,imgsrc) values('".$name."','".$image."')";
+        $query = "insert into demotywatory(title,imgsrc) values('".$name."','".$target_file."')";
 
         mysqli_query($conn,$query) or die(mysqli_error($conn));
 
     }
 
 }
-
-//$images_sql = 'SELECT * from demotywatory order by id desc';
-//$result = mysqli_query($conn, $images_sql);
-
 
 $sql = "select * from demotywatory order by id desc ";
 $result = $conn->query($sql);
