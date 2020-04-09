@@ -131,34 +131,13 @@ $conn->close();
         <div class="post">
             <h3><?php echo $r['title']?></h3>
             <img src='<?php echo $r['imgsrc'] ?>' >
-
-            <button class="btnpost" id="<?php echo $r['id'] ?>" onClick="reply_click(this)">Usun</button>
+            <a href="delete.php?id=<?php echo $r['id']?>">Click me</a>
         </div>
         <?php endforeach; ?>
     </div>
 </div>
 
 <script>
-    function reply_click(obj) {
-        var id = obj.id;
-        console.log(id);
-
-        if (confirm("Czy na pewno usunac?")) {
-            $.ajax({
-                method: "POST",
-                url: "delete.php",
-                data: {id: id},
-                success: function (data) {
-                    alert('usunieto')
-                },
-                error: function (data) {
-                    alert('nie usunieto');
-
-                }
-            });
-        }
-    }
-
     // Get the modal
     var modal = document.getElementById("myModal");
 
@@ -185,6 +164,5 @@ $conn->close();
         }
     }
 </script>
-
 </body>
 </html>
